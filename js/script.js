@@ -2,6 +2,8 @@
 const overviewDiv = document.querySelector(".overview"); 
 //Your GitHub username
 const username ="drewzin777"; 
+//Select the ul where repos will be displayed
+const repoList = document.querySelector('.repo-list');
 
 async function getGitHubProfile() {
     const url = `https://api.github.com/users/${username}`
@@ -34,6 +36,45 @@ function displayUserInfo(data) {
 
         //Append the new div to the overview element
         overviewDiv.appendChild(userInfoDiv); 
+
+//call the funciton to fetch repos 
+fetchRepos(); 
 }
-//call the funciton to fetch profile info
-getGitHubProfile(); 
+
+//Async function to fetch Github repos
+async function fetchRepos() {
+    const apiUrl = `https://api.github.com/users/${username}/repos?sort=updated&per_page=100`;
+
+    try {
+        const response = await fetch(apiUrl); 
+
+        //Check if response is ok
+        if (!response.ok) {
+            throw new Error(`Error: ${response.status}`);
+        }
+
+        const repos = await response.json(); //Return json response
+        displayRepos(repos);        //Call functions to display repos
+
+    } catch (error) {
+        console.error('Failed to fetch repos:', error);
+    }
+}
+
+//Function to desplay repo info
+function displayRepos(repos) {
+    repoList.innerHTML = '';  //Clear previous list
+
+    repos.forEach(repo => {
+        const listItem = document.createElement('li');
+        listItem.classList.add('repo');
+
+        const repoName = document.createElement('h3');
+        repoName.textContent = repo.name;
+
+        listItem.appendChild(repoName);
+        repoList.appendChild(listItem);
+    });
+}
+ //Call the function to fetech profile info
+ getGitHubProfile();
