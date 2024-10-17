@@ -6,8 +6,8 @@ const username = "drewzin777";
 const repoList = document.querySelector('.repo-list');
 const reposSection = document.querySelector(".repos");
 const repoDataSection = document.querySelector(".repo-data");
-const backToRepoGalleryButton = document.querySelector('.back-to-repo-gallery-button');
-const filterInput = document.querySelector('input[placeholder="Search by name"]');
+const backToRepoGalleryButton = document.querySelector('.view-repos');
+const filterInput = document.querySelector('.filter-repos');
 
 // Async function to fetch GitHub profile
 async function getGitHubProfile() {
@@ -95,7 +95,7 @@ repoList.addEventListener("click", function (e) {
     if (e.target.tagName === "H3") {
         const repoName = e.target.innerText;
         getRepoInfo(repoName);
-        console.log(repoName);
+        //console.log(repoName);
     }
 });
 
@@ -166,11 +166,9 @@ function displayRepoInfo(repoInfo, languages) {
 
 //Event listener for back to repo gallery button
 backToRepoGalleryButton.addEventListener('click', function () {
-    document.querySelector(".repos").classList.remove("hide");
-
-    //Hide the section with individual repo data
-    document.querySelector(".repo-data").classList.add("hide");
-
+    reposSection.classList.remove("hide");  //show repo list
+    repoDataSection.classList.add("hide"); //hide repo details
+    
     //Hide the back to repo gallery button 
     backToRepoGalleryButton.classList.add("hide");
 });
