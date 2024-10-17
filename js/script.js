@@ -6,6 +6,8 @@ const username = "drewzin777";
 const repoList = document.querySelector('.repo-list');
 const reposSection = document.querySelector(".repos");
 const repoDataSection = document.querySelector(".repo-data");
+const backToRepoGalleryButton = document.querySelector('.back-to-repo-gallery-button');
+const filterInput = document.querySelector('input[placeholder="Search by name"]');
 
 // Async function to fetch GitHub profile
 async function getGitHubProfile() {
@@ -66,8 +68,12 @@ async function fetchRepos() {
 
 // Function to display repo list
 function displayRepos(repos) {
-    repoList.innerHTML = ''; // Clear previous list
+    //Show the filter input at the top of the function
+    filterInput.classList.remove("hide");
 
+    repoList.innerHTML = ''; // Clear previous repo list
+
+    //Loop through the repos and create list items
     repos.forEach(repo => {
         const listItem = document.createElement('li');
         listItem.classList.add('repo');
@@ -153,5 +159,43 @@ function displayRepoInfo(repoInfo, languages) {
     // Unhide the repo-data section and hide the repos section
     repoDataSection.classList.remove('hide');
     reposSection.classList.add('hide');
+
+    //Unhide the "Back to repo gallery" button
+    backToRepoGalleryButton.classList.remove('hide');
 }
 
+//Event listener for back to repo gallery button
+backToRepoGalleryButton.addEventListener('click', function () {
+    document.querySelector(".repos").classList.remove("hide");
+
+    //Hide the section with individual repo data
+    document.querySelector(".repo-data").classList.add("hide");
+
+    //Hide the back to repo gallery button 
+    backToRepoGalleryButton.classList.add("hide");
+});
+
+//Add event listener to filter Input
+filterInput.addEventListener("input", function (e) {
+    const searchValue = e.target.value;
+    console.log(searchValue); // Log search value to make sure its captured
+
+    //create a variable to select all repos
+    const repos = document.querySelectorAll(".repo");
+
+    //convert the search to lowercase
+    const lowerCaseSearchValue = searchValue.toLowerCase();
+
+    //Loop through each repo
+    repos.forEach(repo => {
+        //convert the innerTest of each repo to lowercase
+        const repoText = repo.querySelector("h3").innerText.toLowerCase();
+
+        //Check if repo containse the search value
+        if (repoText.includes(lowerCaseSearchValue)) {
+            repo.style.display = "block";
+        } else {
+            repo.style.display = "none"; //Hide repo if it doesn't match
+        }
+    });
+});
